@@ -10,7 +10,7 @@ fn main() {
     // let query_string = &args[1];
     // let file_path    = &args[2];
 
-    let config = parse_config(&args);
+    let config = Config::new(&args);
 
     // println!("The search string is {} in the file path {}", query_string, file_path);
 
@@ -25,10 +25,20 @@ struct Config<'a> {
     file_path: &'a str,
 }
 
-fn parse_config(args: &[String]) -> Config {
+impl Config <'_>{
+    fn new(args: &[String]) -> Config{
+        let query_string = &args[1];
+        let file_path    = &args[2];
 
-    let query_string = &args[1];
-    let file_path    = &args[2];
+        Config { query_string, file_path}   
 
-    Config { query_string, file_path}
+    }
 }
+
+// fn parse_config(args: &[String]) -> Config {
+
+//     let query_string = &args[1];
+//     let file_path    = &args[2];
+
+//     Config { query_string, file_path}
+// }
