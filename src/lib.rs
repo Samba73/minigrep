@@ -24,12 +24,41 @@ impl Config <'_>{
 }
 
 // public function called in main.rs to print the content of file
-pub fn run(config: Config) -> Result<String, Box<dyn Error>>{
+pub fn run(config: Config) -> Result<Vec<String>, Box<dyn Error>>{
+
+    // let mut result = Vec::new();
 
     let file_contents = fs::read_to_string(config.file_path)?;
 
-    // println!("The file content is {}", file_contents);
+    let result = search(&config.query_string, &file_contents);
 
-    Ok(file_contents)
+    Ok(result)
+}
 
+pub fn search(query_string: &str, contents: &str) -> Vec<String> {
+
+    let mut result = Vec::new();
+
+    for line in contents.lines() {
+        if line.contains(query_string) {
+            result.push(line.trim().to_string());
+        }
+    }
+    result
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn one_result(){
+        let query_string = "duct";
+        let contents = "\
+    Rust: 
+    Safe, Fast, and Productive.
+    Pick three.";
+
+        assert_eq!(vec!["Safe, Fast, and Productive."], search(query_string, contents));
+    }
 }

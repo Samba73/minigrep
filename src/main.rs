@@ -16,7 +16,9 @@ fn main() {
         println!("Application error occured {}", e);
         process::exit(1);
     } else {
-        println!("The file contents: \n {}", result.unwrap());
+        for item in result.unwrap() {
+            println!("{item}");
+        }
     }
 
 }
