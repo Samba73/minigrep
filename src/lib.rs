@@ -16,7 +16,7 @@ impl Config {
         args.next();
 
 
-        
+
         let query_string = match args.next() {
             Some(query)  => query,
             None         => return Err("No argument provided"),
@@ -52,30 +52,34 @@ pub fn run(config: Config) -> Result<Vec<String>, Box<dyn Error>>{
 
 pub fn search(query_string: &str, contents: &str) -> Vec<String> {
 
-    let mut result = Vec::new();
+    // let mut result = Vec::new();
 
-    for line in contents.lines() {
-        if line.contains(query_string) {
-            result.push(line.trim().to_string());
-        }
-    }
-    result
+    // for line in contents.lines() {
+    //     if line.contains(query_string) {
+    //         result.push(line.trim().to_string());
+    //     }
+    // }
+    // result
+
+    contents.lines().filter(|line| line.contains(query_string)).map(|line| line.trim().to_string()).collect()
 }
 
-pub fn search_case_insensitive(query_string: &str, contents: &str) ->Vec<String>{
+pub fn search_case_insensitive<'a>(query_string: &str, contents: &'a str) ->Vec<String>{
 
-    let mut result = Vec::new();
+    // let mut result = Vec::new();
 
     let binding = query_string.to_lowercase();
     let q_string = binding.as_str();
-    // let q_string = query_string.to_lowercase();
+    // // let q_string = query_string.to_lowercase();
 
-    for line in contents.lines() {
-        if line.to_lowercase().contains(q_string) {
-            result.push(line.trim().to_string());
-        }
-    }
-    result
+    // for line in contents.lines() {
+    //     if line.to_lowercase().contains(q_string) {
+    //         result.push(line.trim().to_string());
+    //     }
+    // }
+    // result
+
+    contents.lines().filter(|line|line.to_lowercase().contains(q_string)).map(|line|line.trim().to_string()).collect()
 
 }
 
