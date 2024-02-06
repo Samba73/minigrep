@@ -3,21 +3,29 @@ use std::{env, fs, error::{Error}};
 // struct used in main.rs that have config fields grouped 
 // has method implemented that build the config from the command line argument
 #[derive(Debug)]
-pub struct Config<'a> {
-    query_string: &'a str,
-    file_path: &'a str,
+pub struct Config {
+    query_string: String,
+    file_path: String,
     ignore_case: bool,
 }
 
-impl Config <'_>{
-    pub fn build(args: &[String]) -> Result<Config, &str>{
+impl Config {
+    pub fn build(mut args: impl Iterator<Item = String>,) -> Result<Config, &'static str>{
 
-        if args.len() < 3 {
-            return Err("Insufficient arguments provided")
-        }
+        // use the next() to move the iterator to next item (first index is always the name of the program as in unix)
+        args.next();
 
-        let query_string = &args[1];
-        let file_path    = &args[2];
+
+        
+        let query_string = match args.next() {
+            Some(query)  => query,
+            None         => return Err("No argument provided"),
+        };
+
+        let file_path    = match args.next() {
+            Some(filep)  => filep,
+            None         => return Err("No such argument provided"),
+        };    
 
         let ignore_case  = env::var("IGNORE_CASE").is_ok();
 
